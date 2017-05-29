@@ -43,3 +43,23 @@ from Disciplina Natural Join
      CursoDisciplina Natural join
      Curso
 order by semestre;
+
+
+
+
+
+
+/* ############# Consultas para os Alunos do Curso ############
+   **** Consulta de Matrículas no semestre corrente
+   **** Turmas abertas durante o semestre
+   **** Disciplinas relacionadas ao curso
+*/
+
+-- Consulta de Matrículas no semestre corrente 
+select siglaTurma as 'Turma', semestreTurma as 'Semestre', anoTurma as 'Ano', nomeDisciplina as 'Disciplina'  
+from Disciplina natural join Turma natural join Matricula natural join Usuario where (identificacao = '160011111'
+and codEstado = 3 and turmaEncerrada = false);
+
+-- Consulta de Turmas para realização de Matriculas
+select siglaTurma as 'Turma', semestreTurma as 'Semestre', anoTurma as 'Ano', nomeDisciplina as 'Disciplina'  
+from Disciplina natural join Turma natural join Matricula;
