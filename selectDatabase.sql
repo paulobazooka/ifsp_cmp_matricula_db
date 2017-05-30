@@ -87,7 +87,7 @@ from Disciplina natural join
      Turma      natural join 
      Horario    
      
-where (aberto = 1);
+where (aberto = false);
 
 
 -- Consulta de Disciplinas relacionadas ao curso
