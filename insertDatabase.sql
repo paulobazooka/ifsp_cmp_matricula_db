@@ -37,7 +37,15 @@ INSERT INTO Disciplina(semestre,                     nomeDisciplina,    siglaDis
                       (       5,                 'Serviços de Rede', 			  'SSR',  		   80,       	'A disciplina aborda a implantação e configuração dos principais serviços de rede. O componente curricular apresenta e explica os principais aspectos necessários para a implantação de um sistema em rede com vários serviços disponíveis ao usuário. Toda a disciplina é desenvolvida em ambiente de software livre, sendo também uma introdução ao Linux.'),
                       (       2,            'Sistemas Operacionais',			  'SOP',  		   80,       	'sem informação'),
                       (       6,          'Segurança da Informação',		      'SSI',  		   80,       	'sem informação'),
-                      (       6,                'Tópicos Especiais',			  'TPE',  		   80,       	'sem informação');
+                      (       6,                'Tópicos Especiais',			  'TPE',  		   80,       	'sem informação'),
+					  (       4,  'Programação Orientada à Objetos',			  'POO',  		   80,       	'sem informação'),
+                      (       4,            'Estrutura de Dados II',			  'ED2',  		   80,       	'sem informação'),
+                      (       4,          'Arquitetura de Software',			  'ASW',  		   80,       	'sem informação'),
+                      (       4,'Metodologia de Pesquisa Científica',			  'MPC',  		   80,       	'sem informação'),
+                      (       4,  'Desenvolvimento de Sistemas Web',              'DSW',           80,          'sem informação'); 
+                           
+                      
+
          
 
 
@@ -55,20 +63,34 @@ INSERT INTO EstadoMat(codEstado,     descricao) VALUES
                      (        5,    'Abandono');
                      
 -- pré requisitos das disciplinas
-/*INSERT INTO DisciplinaPreRequisitos(codDisciplina, preRequisito) VALUES
-								   (            20,           1),
-                                   (            20,          19),
-                                   (            29,           4),
-                                   (			16,          15),
-                                   (            23,          22),
-                                   (             6,           5),
-                                   (            21,          20),
-                                   (            21,           5),
-                                   (            12,          20),
-                                   (             3,           9),
-                                   (            17,           9),
-                                   (            11,          22),
-                                   (            ,           1),*/
+INSERT INTO DisciplinaPreRequisitos(codDisciplina, preRequisito) VALUES
+								   (           30,            4),
+                                   (           16,           15),
+                                   (           20,           19),
+                                   (	       20,            1),
+                                   (           23,           22),
+                                   (            6,            5),
+                                   (           21,           20),
+                                   (           21,            5),
+                                   (           12,           20),
+                                   (            3,            9),
+                                   (           17,            9),
+                                   (           11,           22),
+                                   (           28,           30),
+                                   (           33,           30),
+                                   (           34,           12),
+                                   (           35,            3),
+                                   (           29,           28),
+                                   (           25,           36),
+								   (           25,           33),
+                                   (           25,            2),
+                                   (           27,            3),
+                                   (           13,            3),
+                                   (           13,           18),
+                                   (           26,           25),
+                                   (           37,           33),
+                                   (           37,            8),
+                                   (           10,           18);
          
 -- relaciona cursos com as disciplinas
 INSERT INTO CursoDisciplina(codCurso, codDisciplina) VALUES
@@ -256,7 +278,7 @@ INSERT INTO Horario(codTurma, diaSemana, horaInicio, horaTermino) VALUES
 
 
 INSERT INTO Matricula(codTurma, codUsuario,       codEstado,  concluido) VALUES
-					 (       1,          5,				  3,       true),
+					 (       1,          5,				  3,      false),
                      (       2,          5, 			  3,       true),
                      (       3,          5, 			  3,       true),
                      (       4,          5, 			  3,       true),
