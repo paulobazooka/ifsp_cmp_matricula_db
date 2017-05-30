@@ -40,17 +40,17 @@ DELIMITER ;
 
 
 
-# Criar trigger para atualizar a tabela disciplina concluida quando for mudado o status da turma
+# Criar trigger para atualizar a tabela disciplina concluida quando for mudado o status de conclusão na matricula
+USE SisMatricula;
 DROP TRIGGER if exists trigger_atualiza_disciplina_concluida;
 DELIMITER ||
 CREATE TRIGGER trigger_atualiza_disciplina_concluida
 AFTER UPDATE ON Matricula
 FOR EACH ROW
 BEGIN
-IF (NEW.Matricula.concluido = true) THEN		 -- Se houve concluiu a disciplina   
-         INSERT DisciplinaConcluida (codUsuario, codDisciplina) VALUES 
-	     (NEW.codUsuario, (select codDisciplina from Turma 
-                           where codDisciplina = DisciplinaConcluida.NEW.codDisciplina));
+IF (NEW.concluido = true) THEN		 -- Se houve conclusão da disciplina   
+         INSERT DisciplinaConcluida (codUsuario, codTurma) VALUES 
+	     (NEW.codUsuario, NEW.codTurma);
    
 END IF;
 

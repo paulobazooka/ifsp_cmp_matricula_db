@@ -278,7 +278,7 @@ INSERT INTO Horario(codTurma, diaSemana, horaInicio, horaTermino) VALUES
 
 
 INSERT INTO Matricula(codTurma, codUsuario,       codEstado,  concluido) VALUES
-					 (       1,          5,				  3,      false),
+					 (       1,          5,				  3,       true),
                      (       2,          5, 			  3,       true),
                      (       3,          5, 			  3,       true),
                      (       4,          5, 			  3,       true),
@@ -496,15 +496,15 @@ INSERT INTO Matricula(codTurma, codUsuario,       codEstado,  concluido) VALUES
                      (       7,         35,				  3,       true),
                    
                    -- 2º semestre
-                     (       8,          5,				  3,       true),
-                     (       9,          5, 			  3,       true),
+                     (       8,          5,				  3,      false),
+                     (       9,          5, 			  3,      false),
                      (      10,          5, 			  3,       true),
                      (      11,          5, 			  3,       true),
                      (      12,          5, 			  3,       true),
                      (      13,          5, 			  3,       true),
-                     (       8,          6, 			  3,       true),
+                     (       8,          6, 			  3,      false),
                      (       9,          6, 			  3,       true),
-                     (      10,          6, 			  3,       true),
+                     (      10,          6, 			  3,      false),
                      (      11,          6, 			  3,       true),
                      (      12,          6, 			  3,       true),
                      (      13,          6, 			  3,       true),
@@ -674,13 +674,13 @@ INSERT INTO Matricula(codTurma, codUsuario,       codEstado,  concluido) VALUES
                      (       9,         34,				  3,       true),
                      (      10,         34,				  3,       true),
                      (      11,         34,				  3,       true),
-                     (      12,         34,				  3,       true),
+                     (      12,         34,				  3,      false),
                      (      13,         34,				  3,       true),
                      (       8,         35,				  3,       true),
                      (       9,         35,				  3,       true),
                      (      10,         35,				  3,       true),
                      (      11,         35,				  3,       true),
-                     (      12,         35,				  3,       true),
+                     (      12,         35,				  3,      false),
                      (      13,         35,				  3,       true);
                     
                      
@@ -712,7 +712,7 @@ INSERT INTO ProfessorTurma(codUsuario, codTurma) VALUES
                           (         4,       18),
                           (        47,       19);
 
-
+/*
 
  INSERT INTO DisciplinaConcluida(codTurma, codUsuario) VALUES
 							  -- 1º semestre	
@@ -900,15 +900,15 @@ INSERT INTO ProfessorTurma(codUsuario, codTurma) VALUES
 							    (       7,         30),
                                 
                               -- 2º semestre
-								(       8,          5),
-                                (       9,          5),
+							-- (       8,          5),
+                            -- (       9,          5),
 								(      10,          6),
 								(      11,          6),
 								(      12,          6),
 								(      13,          6),
-								(       8,          7),
+							-- (       8,          7),
 								(       9,          7),
-								(      10,          7),
+							-- (      10,          7),
 								(      11,          7),
 								(      12,          7),                    
 								(      13,          7),
@@ -1072,11 +1072,11 @@ INSERT INTO ProfessorTurma(codUsuario, codTurma) VALUES
 								(       9,         34),
 								(      10,         34),
 								(      11,         34),
-								(      12,         34),
+							   -- (      12,         34),
 								(      13,         34),
 								(       8,         35),
 								(       9,         35),
 								(      10,         35),
 								(      11,         35),
-								(      12,         35),
+							   -- (      12,         35),
 								(      13,         35);
