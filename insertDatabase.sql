@@ -176,14 +176,19 @@ INSERT INTO AlunoCurso(codCurso, codUsuario) VALUES
 
 -- Turmas para teste padrão
 INSERT INTO Turma(siglaTurma, codCurso, codDisciplina,   anoTurma,   semestreTurma,   codTurno,  vagas,   turmaEncerrada, aberto) VALUES
-				 ('APO1301',         1,             1,       2013,              02,          3,     40,            false,   true),
-                 ('LP11301',         1,            19,       2013,              02,          3,     40,            false,   true),
-                 ('ING1301',         1,            15,       2013,              02,          3,     40,            false,   true),
-                 ('HCT1301',         1,            14,       2013,              02,          3,     40, 	       false,   true),
-                 ('MAT1301',         1,            22,       2013,              02,          3,     40, 	       false,   true),
-                 ('ARQ1301',         1,             4,       2013,              02,          3,     40,            false,   true),
-                 ('CEE1301',         1,             7,       2013,              02,          3,     40,            false,   true);
-
+				 ('APO1301',         1,             1,       2013,              02,          3,     40,             true,  false),
+                 ('LP11301',         1,            19,       2013,              02,          3,     40,             true,  false),
+                 ('ING1301',         1,            15,       2013,              02,          3,     40,             true,  false),
+                 ('HCT1301',         1,            14,       2013,              02,          3,     40, 	        true,  false),
+                 ('MAT1301',         1,            22,       2013,              02,          3,     40, 	        true,  false),
+                 ('ARQ1301',         1,             4,       2013,              02,          3,     40,             true,  false),
+                 ('CEE1301',         1,             7,       2013,              02,          3,     40,             true,  false),
+                 ('EDI1701',         1,			   12,		 2017,			    01,			 3,     40,   		   false,   true),
+                 ('LP31701',         1,            21,       2017,              01,          3,     40,            false,   true),
+                 ('MFI1701',         1,            23,       2017,              01,          3,     40,            false,   true),
+                 ('BD21701',         1,             6,       2017,              01,          3,     40,            false,   true),
+                 ('AOO1701',         1,             3,       2017,              01,          3,     40,            false,   true),
+                 ('IHC1701',         1,            17,       2017,              01,          3,     40,            false,   true); 
 
 
 -- Inserir horarios para as turmas
@@ -194,7 +199,13 @@ INSERT INTO Horario(codTurma, diaSemana, horaInicio, horaTermino) VALUES
                    (       7,         4,    '21:00',     '22:40'),
                    (       5,         6,    '19:00',     '20:40'),
                    (       6,         6,    '21:00',     '22:40'),
-                   (       4,         5,    '19:00',     '22:40');
+                   (       4,         5,    '19:00',     '22:40'),
+                   (       8,         6,    '19:00',     '22:40'),
+                   (       9,         2,    '19:00',     '22:40'),
+                   (      10,         4,    '21:00',     '22:40'),
+                   (      11,         3,    '19:00',     '22:40'),
+                   (      12,         5,    '19:00',     '22:40'),
+                   (      13,         4,    '19:00',     '20:50'); 
 
 
 
@@ -215,7 +226,13 @@ INSERT INTO Matricula(codTurma, codUsuario,       codEstado) VALUES
                      (       4,          9, 			  1),
                      (       5,          9, 			  2),
                      (       5,          8, 			  1),
-                     (       5,          7, 			  2);
+                     (       5,          7, 			  2),                    
+                     (       8,         10,				  1),
+                     (       9,         10,				  1),
+                     (      10,         10,				  1),
+                     (      11,         10,				  1),
+                     (      12,         10,				  1),
+                     (      13,         10,				  1);
 
 
 
