@@ -1,6 +1,5 @@
+-- ---------------------------------- Povoando o Banco de Dados -------------------------------------
 USE SisMatricula;
-
-
 
 INSERT INTO Curso(nomeCurso, siglaCurso, dtCurso, descricao) VALUES 
 				 ('Análise e Desenvolvimento de Sistemas', 'ADS','2013-06-01', null),
@@ -49,15 +48,13 @@ INSERT INTO Disciplina(semestre,                     nomeDisciplina,    siglaDis
                       (       4,  'Desenvolvimento de Sistemas Web',              'DSW',           80,          'sem informação'); 
                            
                       
-
-         
-
-
+	
 INSERT INTO Turno(codTurno,    nomeTurno) VALUES
                  (       1,   'Matutino'),
                  (		 2, 'Vespertino'),
                  (       3,    'Noturno'); 
                  
+
 
 INSERT INTO EstadoMat(codEstado,     descricao) VALUES
                      (        1,  'Solicitado'),
@@ -65,6 +62,7 @@ INSERT INTO EstadoMat(codEstado,     descricao) VALUES
                      (        3,    'Deferido'),
                      (        4,   'Cancelada'),
                      (        5,    'Abandono');
+                     
                      
 -- pré requisitos das disciplinas
 INSERT INTO DisciplinaPreRequisitos(codDisciplina, preRequisito) VALUES
@@ -95,6 +93,7 @@ INSERT INTO DisciplinaPreRequisitos(codDisciplina, preRequisito) VALUES
                                    (           37,           33),
                                    (           37,            8),
                                    (           10,           18);
+         
          
 -- relaciona cursos com as disciplinas
 INSERT INTO CursoDisciplina(codCurso, codDisciplina) VALUES
@@ -144,7 +143,8 @@ INSERT INTO TipoUsuario (descricao)  VALUES
                         ('Aluno Superior'),
                         ('Aluno Técnico');
                        
-   
+  
+  
 -- Usuários para teste padrão                      
 INSERT INTO Usuario(        senha,      nomeUsuario,      identificacao,         dataNas,           cpf,      ingresso,             email,       telefone1,      telefone2,  codTipoUsuario) VALUES
                    (md5('admin1'),  'Administrador',        'mat000001',    '1970-01-08',   12345678900,  '2013-06-01',  'admin@admin.if',   '19234567891',  '19998787878',               1),
@@ -196,7 +196,8 @@ INSERT INTO Usuario(        senha,      nomeUsuario,      identificacao,        
 				   (md5('123456'),   'Mário Sergio',        'mat000011',    '1960-12-03',   00002002023,  '2016-03-01',  'mariop@prof.if',   '19777788876',  '19614146699',               4),
 				   (md5('123456'),    'Oswald Cruz',        'mat000012',    '1878-06-10',   00000000202,  '2016-03-01',  'cruzow@prof.if',   '19234712586',  '19667485123',               4);
 				
-                   
+ 
+ 
 -- Aluno Curso matriculado teste padrão
 INSERT INTO AlunoCurso(codCurso, codUsuario) VALUES
                       (       1,          5),
@@ -232,6 +233,7 @@ INSERT INTO AlunoCurso(codCurso, codUsuario) VALUES
                       (       1,         35);
                       
 
+
 -- Turmas para teste padrão
 INSERT INTO Turma(siglaTurma, codCurso, codDisciplina,   anoTurma,   semestreTurma,   codTurno,  vagas,   turmaEncerrada, aberto) VALUES
 				 
@@ -257,6 +259,7 @@ INSERT INTO Turma(siglaTurma, codCurso, codDisciplina,   anoTurma,   semestreTur
                  ('BD21701',         1,             6,       2017,              01,          3,     40,            false,   true),
                  ('AOO1701',         1,             3,       2017,              01,          3,     40,            false,   true),
                  ('IHC1701',         1,            17,       2017,              01,          3,     40,            false,   true);
+
 
 
 -- Inserir horarios para as turmas

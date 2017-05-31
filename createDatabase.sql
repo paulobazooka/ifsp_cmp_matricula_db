@@ -79,7 +79,7 @@ CREATE TABLE Turma(codTurma int primary key auto_increment,
 
 -- Tabela para relacionar a turma com os horarios.
 CREATE TABLE Horario(codTurma int not null,
-                     diaSemana int not null,
+                     diaSemana varchar(15) not null,
 					 horaInicio time not null,
 					 horaTermino time not null,
                      FOREIGN KEY(codTurma) REFERENCES Turma(codTurma) ON DELETE CASCADE);

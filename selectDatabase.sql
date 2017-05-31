@@ -179,7 +179,7 @@ DELIMITER ;
 
 
 # ------------------------- procedure disciplinas não concluidas -------------------------------   
-/*USE SisMatricula;
+USE SisMatricula;
 DROP PROCEDURE IF EXISTS procedure_disciplinas_nao_concluidas;
 DELIMITER $$
 CREATE PROCEDURE procedure_disciplinas_Nao_concluidas(IN codAluno int) 
@@ -190,14 +190,10 @@ BEGIN
        
       from Disciplina natural join
            Curso natural join
-           Usuario
-      
-      where (
-      codUsuario = 29 
-      AND codDisciplina if not exists (select codDisciplina, siglaTurma from Turma natural join Usuario natural join DisciplinaConcluida where codUsuario = 5));
-
+           Usuario;
+                                 /* !!!!!!!! FALTA ARRUMAR !!!!!!!*/
 END $$
-DELIMITER ;*/
+DELIMITER ;
 # ------------------------------------------------------------------------------------------
 
 
@@ -234,12 +230,15 @@ where (Turma.codTurma = Horario.codTurma AND
 
 
 
-
--- Consulta de Turmas para realização de Matriculas
-select siglaTurma     as 'Turma', 
+# ------------------ Consulta de Disciplinas disponíveis para matrícula ------------------
+DROP VIEW IF EXISTS view_consulta_disciplinas_para_matricula;
+CREATE VIEW view_consulta_disciplinas_para_matricula as
+select codTurma       as 'Codigo',
+       siglaTurma     as 'Turma', 
        semestreTurma  as 'Semestre', 	
        anoTurma       as 'Ano', 
        nomeDisciplina as 'Disciplina',
+       diaSemana      as 'Dia',
        horaInicio     as 'Horario Inicio',
        horaTermino    as 'Horario Termino'
        
@@ -247,12 +246,16 @@ from Disciplina natural join
      Turma      natural join 
      Horario    
      
-where (aberto = false);
+where (aberto = true);
+# -----------------------------------------------------------------------------------------
 
 
 
 
--- Consulta de Disciplinas relacionadas ao curso
+
+# ---------------- view para consultar as disciplinas relacionadas ao curso ----------------
+DROP VIEW IF EXISTS view_consulta_disciplinas_curso;
+CREATE VIEW view_consulta_disciplinas_curso as
 select siglaDisciplina as 'Sigla',
        nomeDisciplina  as 'Disciplina',
        nomeCurso	   as 'Curso'
@@ -260,26 +263,39 @@ select siglaDisciplina as 'Sigla',
 from Disciplina Natural join
      CursoDisciplina Natural join	
      Curso Order by nomeDisciplina;
+# ------------------------------------------------------------------------------------------     
      
+  
+  
+  
      
-     
-     
-     
--- Consulta da situação das Matrículas
+# --------------- procedure para consultar a situação da matricula do aluno -------------------     
+DROP PROCEDURE IF EXISTS procedure_consulta_situacao_matricula;
+DELIMITER $$
+CREATE PROCEDURE procedure_consulta_situacao_matricula(IN codAluno int)
+BEGIN 
 select siglaTurma as 'Turma', 
        semestreTurma as 'Semestre', 
        anoTurma as 'Ano', 
        nomeDisciplina as 'Disciplina',
+       Horario.diaSemana as 'Dia',
        horaInicio as 'Hora Inicio',
-       horaTermino as 'Hora Fim'
+       horaTermino as 'Hora Fim',
+       descricao   as 'Situação'
        
 from Disciplina natural join 
      Turma      natural join 
      Matricula  natural join
      Usuario, 
-     Horario
+     Horario,
+     EstadoMat
      
 where (Turma.codTurma = Horario.codTurma AND
-       identificacao = '160011111' AND 
-       codEstado = 1);
-     
+       codUsuario = codAluno             AND 
+       Matricula.codUsuario = codAluno   AND
+       Matricula.concluido = false       AND
+       Turma.aberto = true               AND
+       EstadoMat.codEstado = Matricula.codEstado);
+END $$
+DELIMITER ;       
+# -----------------------------------------------------------------------------     
