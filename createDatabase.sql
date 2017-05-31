@@ -92,7 +92,7 @@ CREATE TABLE Horario(codTurma int not null,
 CREATE TABLE Matricula(codMatricula int primary key auto_increment,
 					   codTurma int not null,
                        codUsuario int not null,                       
-                       dtMatricula date not null default now(),
+                       dtMatricula datetime not null default current_timestamp(),
                        concluido boolean not null default false,
                        codEstado int not null default 1,
                        FOREIGN KEY (codTurma)   REFERENCES Turma(codTurma)      ON DELETE CASCADE,
@@ -144,7 +144,32 @@ CREATE TABLE DisciplinaConcluida(codUsuario int,
 
 CREATE TABLE AssinaturaDigitalMatricula(codAss int primary key auto_increment,
 										codMatricula int,
-                                        dtDeferimento datetime default now(),
+                                        dtDeferimento datetime not null default now(),
                                         assinatura varchar(200),
                                         FOREIGN KEY (codMatricula) REFERENCES Matricula(codMatricula) ON DELETE CASCADE);
                                                                        
+
+
+
+
+-- trigger auxilar para povoar as tabelas DisciplinaConcluida e AssinaturaDigitalMatricula
+USE SisMatricula;
+DROP TRIGGER if exists trigger_atualiza_disciplina_concluida_insert;
+DELIMITER ||
+CREATE TRIGGER trigger_atualiza_disciplina_concluida_insert
+AFTER INSERT ON Matricula
+FOR EACH ROW
+BEGIN
+     if (NEW.concluido = true) THEN  -- Se a disciplina foi concluida
+         INSERT DisciplinaConcluida (codUsuario, codTurma) VALUES  -- inserir na tabela DisciplinaConcluida os campos codUsuario, codTurma
+	     (NEW.codUsuario, NEW.codTurma);                           -- os campos recém adicionados na tabela matricula
+     end if;
+     
+     if (NEW.codEstado = 3) THEN     -- Se a matricula foi deferida...
+         INSERT INTO AssinaturaDigitalMatricula (codMatricula, assinatura, dtDeferimento) VALUES  -- inserir na tabela
+			    (NEW.codMatricula, md5(NEW.codMatricula + NEW.codTurma + NEW.codUsuario +        -- comprovação da matricula
+                 NEW.dtMatricula + now()), NEW.dtMatricula);                                    -- através dos campos indicados
+     end if;
+
+END ||
+DELIMITER ;

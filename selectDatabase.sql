@@ -1,13 +1,58 @@
--- SELECT @@lc_time_names;
--- SET GLOBAL lc_time_names=pt_BR;
--- SET lc_time_names = 'pt_BR';
-
-use SisMatricula;
-
-/*
-  ############ Consulta Usuario válido ############
-  ***** retornar se o usuario existe ou não no banco de dados
+ /*SELECT @@lc_time_names;
+   SET GLOBAL lc_time_names=pt_BR;
+   SET lc_time_names = 'pt_BR';
+   SELECT @@lc_time_names;
 */
+
+
+# ----------------- Procedure para retornar o semestre atual ---------------------
+USE SisMatricula;
+DROP PROCEDURE IF EXISTS procedure_retorna_semestre_atual;
+DELIMITER $$
+CREATE PROCEDURE procedure_retorna_semestre_atual() 
+BEGIN
+
+    if(select (month(now())/6) > 1) THEN
+       select 2; 
+    else
+       select 1;    
+    end if;
+
+END $$
+DELIMITER ;  -- call procedure_retorna_semestre_atual();
+# --------------------------------------------------------------------------------
+
+
+
+
+
+# ----------------- Procedure para retornar o nome do dia da semana ---------------------
+USE SisMatricula;
+DROP PROCEDURE IF EXISTS procedure_retorna_nome_dia;
+DELIMITER $$
+CREATE PROCEDURE procedure_retorna_nome_dia(IN dia INT) 
+BEGIN
+    
+    if(dia <8 && dia > 0) THEN
+       if (dia = 1) then select 'Domingo';
+		 elseif (dia = 2) then select 'Segunda-Feira';
+            elseif (dia = 3) then select 'Terça-Feira';
+               elseif (dia = 4) then select 'Quarta-Feira';
+                  elseif (dia = 5) then select 'Quinta-Feira';
+                     elseif (dia = 6) then select 'Sexta-Feira';
+                        elseif (dia = 7) then select 'Sabado-Feira';
+	   end if;
+    end if;
+
+END $$
+DELIMITER ;  -- call procedure_retorna_nome_dia(3);
+# --------------------------------------------------------------------------------
+
+
+
+
+
+# ------------------------------ Consulta Usuario válido ----------------------------------
 USE SisMatricula;
 DROP PROCEDURE IF EXISTS procedure_login;    -- procedure para retornar se existe o usuario ou não.
 DELIMITER $$
@@ -22,10 +67,14 @@ BEGIN
     END IF;
     
 END $$
-DELIMITER ;
+DELIMITER ;   -- call procedure_login('170000011', 'fgh987');
+# --------------------------------------------------------------------------------------------
+ 
 
 
 
+
+# ------------------ Procedure retornar os dados do Aluno/Usuario logado ---------------------------
 USE SisMatricula;
 DROP PROCEDURE IF EXISTS procedure_login_retorna_usuario;    -- procedure para retornar o usuario
 DELIMITER $$
@@ -41,39 +90,47 @@ BEGIN
 	      telefone1,
 	      telefone2,
 	      codTipoUsuario
+          
    from Usuario   
+   
    where identificacao = id and senha = md5(pass);
 END $$
-DELIMITER ;
-
-call procedure_login_retorna_usuario('170000011', 'fgh987');
-
+DELIMITER ; -- call procedure_login_retorna_usuario('170000011', 'fgh987');
+# --------------------------------------------------------------------------------------------------
 
 
 
-/* ############# Consultas para o Coordenador do Curso ############
-   **** Consulta de Solicitações de matrículas
-   **** Turmas abertas durante o semestre
-   **** Disciplinas relacionadas ao curso
-*/
 
--- Consulta das Turmas abertas por ordem do dia da semana.
-select Disciplina.nomeDisciplina as 'Disciplina', Turma.siglaTurma   as 'Turma',
-       Horario.diaSemana         as 'Dia',        Horario.horaInicio as 'Inicio',
-       Horario.horaTermino       as 'Termino'       
+
+# ------------------ view das Turmas abertas por ordem do dia da semana ----------------------------
+USE SisMatricula;
+DROP VIEW IF EXISTS view_turmas_abertas;
+CREATE VIEW view_turmas_abertas as
+
+select Turma.codTurma            as 'Codigo',
+       Turma.siglaTurma          as 'Turma', 
+       Disciplina.nomeDisciplina as 'Disciplina', 
+       Horario.diaSemana         as 'Dia', 
+       Horario.horaInicio        as 'Inicio',
+       Horario.horaTermino       as 'Termino' 
+       
 from Disciplina natural join
      Turma      natural join
 	 Horario 
-where Turma.turmaEncerrada = false 
-order by Horario.diaSemana ASC;      
-               
-               
-
+     
+where Turma.turmaEncerrada = false order by Horario.diaSemana ASC;      
+# ----------------------------------------------------------------------------------------------------               
+   
+   
+   
+   
+   
+# ------------------- view das solicitações de matrículas feitas pelos alunos ------------------------
 DROP VIEW IF EXISTS view_solicitacoes_matriculas_coordenador;
 CREATE VIEW view_solicitacoes_matriculas_coordenador as             
--- Consulta das solicitações de matrículas
-select nomeUsuario as 'Aluno',
-       codUsuario as 'codigo Aluno',
+
+select codUsuario as 'codigo Aluno',
+	   nomeUsuario as 'Aluno',       
        identificacao as 'Prontuário', 
        nomeDisciplina as 'Disciplina',
        siglaTurma as 'Turma',
@@ -89,16 +146,61 @@ where EstadoMat.codEstado = 1
 and month(Matricula.dtMatricula) = month(now())
 and  year(Matricula.dtMatricula) =  year(now())
 order by Usuario.nomeUsuario ASC;
+# -----------------------------------------------------------------------------------
+
      
      
--- Consulta das disciplinas existentes
-select semestre		  as 'Semestre',
-       nomeDisciplina as 'Disciplina',
-       nomeCurso      as 'Curso'
-from Disciplina Natural Join
-     CursoDisciplina Natural join
-     Curso
-order by semestre;
+     
+     
+# ------------------------- procedure disciplinas concluídas -------------------------------   
+USE SisMatricula;
+DROP PROCEDURE IF EXISTS procedure_disciplinas_concluidas;
+DELIMITER $$
+CREATE PROCEDURE procedure_disciplinas_concluidas(IN codAluno int) 
+BEGIN
+      select nomeDisciplina as 'Disciplina',
+             siglaTurma     as 'Turma',
+             semestre       as 'Semestre',
+             anoTurma       as 'Ano'
+       
+      from Disciplina natural join
+           Turma      natural join
+           Usuario    natural join
+           DisciplinaConcluida
+      
+      where (codUsuario = codAluno);
+
+END $$
+DELIMITER ;
+# ------------------------------------------------------------------------------------------
+
+
+
+
+
+# ------------------------- procedure disciplinas não concluidas -------------------------------   
+/*USE SisMatricula;
+DROP PROCEDURE IF EXISTS procedure_disciplinas_nao_concluidas;
+DELIMITER $$
+CREATE PROCEDURE procedure_disciplinas_Nao_concluidas(IN codAluno int) 
+BEGIN
+      select codDisciplina  as 'Codigo',
+             nomeDisciplina as 'Disciplina'            
+            
+       
+      from Disciplina natural join
+           Curso natural join
+           Usuario
+      
+      where (
+      codUsuario = 29 
+      AND codDisciplina if not exists (select codDisciplina, siglaTurma from Turma natural join Usuario natural join DisciplinaConcluida where codUsuario = 5));
+
+END $$
+DELIMITER ;*/
+# ------------------------------------------------------------------------------------------
+
+
 
 
 
@@ -131,6 +233,8 @@ where (Turma.codTurma = Horario.codTurma AND
        codEstado = 3 and turmaEncerrada = true);
 
 
+
+
 -- Consulta de Turmas para realização de Matriculas
 select siglaTurma     as 'Turma', 
        semestreTurma  as 'Semestre', 	
@@ -146,6 +250,8 @@ from Disciplina natural join
 where (aberto = false);
 
 
+
+
 -- Consulta de Disciplinas relacionadas ao curso
 select siglaDisciplina as 'Sigla',
        nomeDisciplina  as 'Disciplina',
@@ -154,6 +260,10 @@ select siglaDisciplina as 'Sigla',
 from Disciplina Natural join
      CursoDisciplina Natural join	
      Curso Order by nomeDisciplina;
+     
+     
+     
+     
      
 -- Consulta da situação das Matrículas
 select siglaTurma as 'Turma', 
@@ -171,5 +281,5 @@ from Disciplina natural join
      
 where (Turma.codTurma = Horario.codTurma AND
        identificacao = '160011111' AND 
-       codEstado = 3 and turmaEncerrada = true);
+       codEstado = 1);
      
