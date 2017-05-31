@@ -39,12 +39,57 @@ DELIMITER ;
 
 
 
+/*
+USE SisMatricula;
+DROP TRIGGER if exists trigger_atualiza_turma_insert;
+DELIMITER ||
+CREATE TRIGGER trigger_atualiza_turma_insert
+AFTER INSERT ON Matricula
+FOR EACH ROW
+BEGIN
+
+IF (codEstado = 3) THEN  -- Se a matricula foi deferida...
+    UPDATE Turma t
+	SET t.matriculasRealizadas = t.matriculasRealizadas + 1 
+    WHERE t.codTurma = Matricula.NEW.codTurma;
+	INSERT INTO AssinaturaDigitalMatricula (codMatricula, assinatura) VALUES
+			    (NEW.codMatricula, md5(NEW.codMatricula + NEW.codTurma + NEW.codUsuario + 
+                 NEW.dtMatricula + now()));  
+END IF;
+
+END ||
+DELIMITER ;
+
+*/
+
+
 
 # Criar trigger para atualizar a tabela disciplina concluida quando for mudado o status de conclusão na matricula
 USE SisMatricula;
-DROP TRIGGER if exists trigger_atualiza_disciplina_concluida;
+DROP TRIGGER if exists trigger_atualiza_disciplina_concluida_insert;
 DELIMITER ||
-CREATE TRIGGER trigger_atualiza_disciplina_concluida
+CREATE TRIGGER trigger_atualiza_disciplina_concluida_insert
+AFTER INSERT ON Matricula
+FOR EACH ROW
+BEGIN
+IF (NEW.concluido = true) THEN		 -- Se houve conclusão da disciplina   
+         INSERT DisciplinaConcluida (codUsuario, codTurma) VALUES 
+	     (NEW.codUsuario, NEW.codTurma);
+   
+END IF;
+
+END ||
+DELIMITER ;
+
+
+
+
+
+# Criar trigger para atualizar a tabela disciplina concluida quando for mudado o status de conclusão na matricula
+USE SisMatricula;
+DROP TRIGGER if exists trigger_atualiza_disciplina_concluida_update;
+DELIMITER ||
+CREATE TRIGGER trigger_atualiza_disciplina_concluida_update
 AFTER UPDATE ON Matricula
 FOR EACH ROW
 BEGIN

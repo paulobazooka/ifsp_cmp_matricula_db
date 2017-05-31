@@ -4,6 +4,52 @@
 
 use SisMatricula;
 
+/*
+  ############ Consulta Usuario válido ############
+  ***** retornar se o usuario existe ou não no banco de dados
+*/
+USE SisMatricula;
+DROP PROCEDURE IF EXISTS procedure_login;    -- procedure para retornar se existe o usuario ou não.
+DELIMITER $$
+CREATE PROCEDURE procedure_login (IN id varchar(25), IN pass varchar(25))
+BEGIN
+    IF (true = (select true from Usuario where (identificacao = id
+                             and senha = md5(pass)))) THEN
+        select true from dual; 
+        
+    ELSE 
+        select false from dual;
+    END IF;
+    
+END $$
+DELIMITER ;
+
+
+
+USE SisMatricula;
+DROP PROCEDURE IF EXISTS procedure_login_retorna_usuario;    -- procedure para retornar o usuario
+DELIMITER $$
+CREATE PROCEDURE procedure_login_retorna_usuario (IN id varchar(25), IN pass varchar(25))
+BEGIN
+   select codUsuario,
+	      identificacao,
+	      nomeUsuario,                     
+	      dataNas,
+	      cpf,
+	      date(ingresso),
+	      email,
+	      telefone1,
+	      telefone2,
+	      codTipoUsuario
+   from Usuario   
+   where identificacao = id and senha = md5(pass);
+END $$
+DELIMITER ;
+
+call procedure_login_retorna_usuario('170000011', 'fgh987');
+
+
+
 
 /* ############# Consultas para o Coordenador do Curso ############
    **** Consulta de Solicitações de matrículas
@@ -22,17 +68,27 @@ where Turma.turmaEncerrada = false
 order by Horario.diaSemana ASC;      
                
                
-               
+
+DROP VIEW IF EXISTS view_solicitacoes_matriculas_coordenador;
+CREATE VIEW view_solicitacoes_matriculas_coordenador as             
 -- Consulta das solicitações de matrículas
-select nomeUsuario as 'Aluno', 
+select nomeUsuario as 'Aluno',
+       codUsuario as 'codigo Aluno',
+       identificacao as 'Prontuário', 
        nomeDisciplina as 'Disciplina',
        siglaTurma as 'Turma',
        descricao as 'Estado'
+       
 from Usuario natural join 
      Matricula natural join
      Turma natural join
      Disciplina natural join
-     EstadoMat;
+     EstadoMat
+     
+where EstadoMat.codEstado = 1
+and month(Matricula.dtMatricula) = month(now())
+and  year(Matricula.dtMatricula) =  year(now())
+order by Usuario.nomeUsuario ASC;
      
      
 -- Consulta das disciplinas existentes

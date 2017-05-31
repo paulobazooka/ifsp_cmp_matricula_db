@@ -1,9 +1,13 @@
 USE SisMatricula;
 
+
+
 INSERT INTO Curso(nomeCurso, siglaCurso, dtCurso, descricao) VALUES 
 				 ('Análise e Desenvolvimento de Sistemas', 'ADS','2013-06-01', null),
                  ('Técnico em Análise e Desenvolvimento de Sistemas', 'TADS', '2017-01-01', null),
                  ('Técnico em Eletroeletrônica', 'TEE', '2016-01-01', null);
+                 
+                 
                  
 INSERT INTO Disciplina(semestre,                     nomeDisciplina,    siglaDisciplina,      totalHoras,    ementa) VALUES 
 					  (	      1,          'Algoritmo e Programação',              'APO',           80,    	 	'A disciplina permite o desenvolvimento do raciocínio lógico por meio do formalismo de linguagem de programação e abordando os princípios da representação e manipulação da informação.'),
@@ -176,7 +180,7 @@ INSERT INTO Usuario(        senha,      nomeUsuario,      identificacao,        
                    (md5('89ljht'),           'Raul', 		'170000008',    '1981-10-24',   11000045600,  '2016-02-15', 'ffffff@aluno.if',   '19854654654',  '19111111111',               5),
                    (md5('etrhdb'),        'Miamoto', 		'170000009',    '1981-03-03',   11000004560,  '2016-02-15', 'gggggg@aluno.if',   '19854654654',  '19111111111',               5),
                    (md5('8hklç8'),  'David Gilmour', 		'170000010',    '1981-02-15',   11000000456,  '2016-02-15', 'hhhhhh@aluno.if',   '19854654654',  '19111111111',               5),
-                   (md5('fgh987'),   'Jimi Hendrix', 		'170000011',    '1974-08-08',   11074185963,  '2016-02-15', 'iiiiii@aluno.if',   '19854654654',  '19111111111',               5),
+                   (md5('fgh987'),   'Jimi Hendrix', 		'170000011',    '1943-08-08',   11074185963,  '2016-02-15', 'iiiiii@aluno.if',   '19854654654',  '19111111111',               5),
                    (md5('s9d6c1'),    'Pepeu Gomes', 		'170000012',    '1988-09-17',   11007418529,  '2016-02-15', 'jjjjjj@aluno.if',   '19854654654',  '19111111111',               5),
                    (md5('kjught'),       'Rita Lee', 		'170000013',    '1987-01-31',   11000741852,  '2016-02-15', 'tewqas@aluno.if',   '19854654654',  '19111111111',               5),
                    (md5('u8v5f4'),'Anita Garibaldi', 		'170000014',    '1989-10-09',   11000074185,  '2016-02-15', 'pikjud@aluno.if',   '19854654654',  '19111111111',               5),
