@@ -111,14 +111,16 @@ select Turma.codTurma            as 'Codigo',
        Turma.siglaTurma          as 'Turma', 
        Disciplina.nomeDisciplina as 'Disciplina', 
        Horario.diaSemana         as 'Dia', 
-       Horario.horaInicio        as 'Inicio',
-       Horario.horaTermino       as 'Termino' 
+       date_format(horaInicio, '%H:%i')  as 'Horario Inicio',
+       date_format(horaTermino,'%H:%i')  as 'Horario Termino'
        
 from Disciplina natural join
      Turma      natural join
 	 Horario 
      
-where Turma.turmaEncerrada = false order by Horario.diaSemana ASC;      
+where Turma.turmaEncerrada = false
+          and Turma.aberto = true 
+                             order by nomeDisciplina ASC;      
 # ----------------------------------------------------------------------------------------------------               
    
    
@@ -129,12 +131,14 @@ where Turma.turmaEncerrada = false order by Horario.diaSemana ASC;
 DROP VIEW IF EXISTS view_solicitacoes_matriculas_coordenador;
 CREATE VIEW view_solicitacoes_matriculas_coordenador as             
 
-select codUsuario as 'codigo Aluno',
-	   nomeUsuario as 'Aluno',       
-       identificacao as 'Prontuário', 
+select codMatricula   as 'Codigo Matricula',
+	   codUsuario     as 'Codigo Aluno',
+	   nomeUsuario    as 'Aluno',       
+       identificacao  as 'Prontuário', 
        nomeDisciplina as 'Disciplina',
-       siglaTurma as 'Turma',
-       descricao as 'Estado'
+       codTurma       as 'Codigo Turma',
+       siglaTurma     as 'Turma',
+       descricao      as 'Estado'
        
 from Usuario natural join 
      Matricula natural join
@@ -215,8 +219,8 @@ select siglaTurma as 'Turma',
        semestreTurma as 'Semestre', 
        anoTurma as 'Ano', 
        nomeDisciplina as 'Disciplina',
-       horaInicio as 'Hora Inicio',
-       horaTermino as 'Hora Fim'
+       date_format(horaInicio, '%H:%i')  as 'Horario Inicio',
+       date_format(horaTermino,'%H:%i')  as 'Horario Termino'
        
 from Disciplina natural join 
      Turma      natural join 
@@ -239,8 +243,8 @@ select codTurma       as 'Codigo',
        anoTurma       as 'Ano', 
        nomeDisciplina as 'Disciplina',
        diaSemana      as 'Dia',
-       horaInicio     as 'Horario Inicio',
-       horaTermino    as 'Horario Termino'
+       date_format(horaInicio, '%H:%i')  as 'Horario Inicio',
+       date_format(horaTermino,'%H:%i')  as 'Horario Termino'
        
 from Disciplina natural join 
      Turma      natural join 
@@ -274,14 +278,14 @@ DROP PROCEDURE IF EXISTS procedure_consulta_situacao_matricula;
 DELIMITER $$
 CREATE PROCEDURE procedure_consulta_situacao_matricula(IN codAluno int)
 BEGIN 
-select siglaTurma as 'Turma', 
-       semestreTurma as 'Semestre', 
-       anoTurma as 'Ano', 
-       nomeDisciplina as 'Disciplina',
+select siglaTurma        as 'Turma', 
+       semestreTurma     as 'Semestre', 
+       anoTurma          as 'Ano', 
+       nomeDisciplina    as 'Disciplina',
        Horario.diaSemana as 'Dia',
-       horaInicio as 'Hora Inicio',
-       horaTermino as 'Hora Fim',
-       descricao   as 'Situação'
+       date_format(horaInicio, '%H:%i') as 'Hora Inicio',
+       date_format(horaTermino,'%H:%i') as 'Hora Fim',
+       descricao         as 'Situação'
        
 from Disciplina natural join 
      Turma      natural join 
@@ -297,5 +301,12 @@ where (Turma.codTurma = Horario.codTurma AND
        Turma.aberto = true               AND
        EstadoMat.codEstado = Matricula.codEstado);
 END $$
-DELIMITER ;       
-# -----------------------------------------------------------------------------     
+DELIMITER ;       -- call procedure_consulta_situacao_matricula(5);
+# -----------------------------------------------------------------------------  
+
+
+
+
+
+# ------------------ view de solicitações de matriculas ------------------------ 
+DROP VIEW view_so  
