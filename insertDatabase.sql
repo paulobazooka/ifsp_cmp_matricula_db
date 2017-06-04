@@ -42,8 +42,7 @@ INSERT INTO Disciplina(semestre,                     nomeDisciplina,    siglaDis
                       (       6,          'Segurança da Informação',		      'SSI',  		   80,       	'sem informação'),
                       (       6,                'Tópicos Especiais',			  'TPE',  		   80,       	'sem informação'),
 					  (       4,  'Programação Orientada à Objetos',			  'POO',  		   80,       	'sem informação'),
-                      (       4,            'Estrutura de Dados II',			  'ED2',  		   80,       	'sem informação'),
-                      (       4,          'Arquitetura de Software',			  'ASW',  		   80,       	'sem informação'),
+                      (       4,            'Estrutura de Dados II',			  'ED2',  		   80,       	'sem informação'),                    
                       (       4,'Metodologia de Pesquisa Científica',			  'MPC',  		   80,       	'sem informação'),
                       (       4,  'Desenvolvimento de Sistemas Web',              'DSW',           80,          'sem informação'); 
                            
@@ -79,21 +78,23 @@ INSERT INTO DisciplinaPreRequisitos(codDisciplina, preRequisito) VALUES
                                    (           17,            9),
                                    (           11,           22),
                                    (           28,           30),
-                                   (           33,           30),
-                                   (           34,           12),
-                                   (           35,            3),
+                                   (           33,            3),
+                                   (           33,           21),
                                    (           29,           28),
-                                   (           25,           36),
+								   (           25,           35),
 								   (           25,           33),
                                    (           25,            2),
-                                   (           27,            3),
+								   (           27,            3),
                                    (           13,            3),
                                    (           13,           18),
+                                   (           31,           29),
                                    (           26,           25),
-                                   (           37,           33),
-                                   (           37,            8),
+								   (           36,           33),
+                                   (           36,            8),
                                    (           10,           18);
-         
+                                   
+                               
+                               
          
 -- relaciona cursos com as disciplinas
 INSERT INTO CursoDisciplina(codCurso, codDisciplina) VALUES
@@ -127,12 +128,13 @@ INSERT INTO CursoDisciplina(codCurso, codDisciplina) VALUES
                            (       1,            28),
                            (       1,            29),
                            (       1,            30),
+                           (       1,            31),
                            (       1,            32),
                            (       1,            33),
                            (       1,            34),
                            (       1,            35),
-                           (       1,            36),
-                           (       1,            37);
+                           (       1,            36);
+                           
 						
    
 INSERT INTO TipoUsuario (descricao)  VALUES
@@ -258,8 +260,14 @@ INSERT INTO Turma(siglaTurma, codCurso, codDisciplina,   anoTurma,   semestreTur
                  ('MFI1701',         1,            23,       2017,              01,          3,     40,            false,   true),
                  ('BD21701',         1,             6,       2017,              01,          3,     40,            false,   true),
                  ('AOO1701',         1,             3,       2017,              01,          3,     40,            false,   true),
-                 ('IHC1701',         1,            17,       2017,              01,          3,     40,            false,   true);
-
+                 ('IHC1701',         1,            17,       2017,              01,          3,     40,            false,   true),
+               -- 4º semestre  
+                 ('ED21701',         1,            34,       2017,              01,          3,     40,            false,   true),
+                 ('POO1701',         1,            33,       2017,              01,          3,     40,            false,   true),
+                 ('ASW1701',         1,             2,       2017,              01,          3,     40,            false,   true),
+                 ('MPC1701',         1,            35,       2017,              01,          3,     40,            false,   true),
+                 ('RCO1701',         1,            28,       2017,              01,          3,     40,            false,   true),
+                 ('EST1701',         1,            11,       2017,              01,          3,     40,            false,   true);
 
 
 -- Inserir horarios para as turmas
@@ -284,8 +292,15 @@ INSERT INTO Horario(codTurma,       diaSemana, horaInicio, horaTermino) VALUES
                    (      15, 'Segunda-Feira',    '19:00',     '22:40'),
                    (      16,  'Quarta-Feira',    '21:00',     '22:40'),
                    (      17,   'Terça-Feira',    '19:00',     '22:40'),
-                   (      18,  'Quinta-Feira',     '19:00',     '22:40'),
-                   (      19,  'Quarta-Feira',    '19:00',     '20:50');
+                   (      18,  'Quinta-Feira',    '19:00',     '22:40'),
+                   (      19,  'Quarta-Feira',    '19:00',     '20:50'),
+                 -- 4º semestre 
+				   (      20,   'Sexta-Feira',    '19:00',     '22:40'),
+                   (      21, 'Segunda-Feira',    '19:00',     '22:40'),
+                   (      22,  'Quinta-Feira',    '19:00',     '22:40'),
+                   (      23,   'Terça-Feira',    '19:00',     '20:50'),
+                   (      24,  'Quinta-Feira',    '21:00',     '22:40'),
+                   (      25,  'Quarta-Feira',    '19:00',     '22:40');
 
 
 
