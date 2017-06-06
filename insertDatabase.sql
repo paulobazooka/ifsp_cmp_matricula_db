@@ -91,7 +91,8 @@ INSERT INTO DisciplinaPreRequisitos(codDisciplina, preRequisito) VALUES
                                    (           26,           25),
 								   (           36,           33),
                                    (           36,            8),
-                                   (           10,           18);
+                                   (           10,           18),
+                                   (           34,           12); 
                                    
                                
                                
@@ -267,8 +268,12 @@ INSERT INTO Turma(siglaTurma, codCurso, codDisciplina,   anoTurma,   semestreTur
                  ('ASW1701',         1,             2,       2017,              01,          3,     40,            false,   true),
                  ('MPC1701',         1,            35,       2017,              01,          3,     40,            false,   true),
                  ('RCO1701',         1,            28,       2017,              01,          3,     40,            false,   true),
-                 ('EST1701',         1,            11,       2017,              01,          3,     40,            false,   true);
-
+                 ('EST1701',         1,            11,       2017,              01,          3,     40,            false,   true),
+               -- 5º semestre
+                 ('PS11701',         1,            25,       2017,              01,          3,     40,            false,   true),
+                 ('MTA1701',         1,            24,       2017,              01,          3,     40,            false,   true),
+                 ('QSW1701',         1,            27,       2017,              01,          3,     40,            false,   true),
+                 ('SSR1701',         1,            29,       2017,              01,          3,     40,            false,   true);
 
 -- Inserir horarios para as turmas
 INSERT INTO Horario(codTurma,       diaSemana, horaInicio, horaTermino) VALUES
@@ -300,7 +305,12 @@ INSERT INTO Horario(codTurma,       diaSemana, horaInicio, horaTermino) VALUES
                    (      22,  'Quinta-Feira',    '19:00',     '22:40'),
                    (      23,   'Terça-Feira',    '19:00',     '20:50'),
                    (      24,  'Quinta-Feira',    '21:00',     '22:40'),
-                   (      25,  'Quarta-Feira',    '19:00',     '22:40');
+                   (      25,  'Quarta-Feira',    '19:00',     '22:40'),
+                 -- 5º semestre
+                   (       8,   'Sexta-Feira',    '19:00',     '22:40'),
+                   (       9, 'Segunda-Feira',    '19:00',     '22:40'),
+                   (      10,  'Quinta-Feira',    '19:00',     '22:40'),
+                   (      11,   'Terça-Feira',    '19:00',     '20:50');
 
 
 

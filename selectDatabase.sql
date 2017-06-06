@@ -107,16 +107,17 @@ USE SisMatricula;
 DROP VIEW IF EXISTS view_turmas_abertas;
 CREATE VIEW view_turmas_abertas as
 
-select Turma.codTurma            as 'Codigo',
-       Turma.siglaTurma          as 'Turma', 
-       Disciplina.nomeDisciplina as 'Disciplina', 
-       Horario.diaSemana         as 'Dia', 
-       date_format(horaInicio, '%H:%i')  as 'Horario Inicio',
-       date_format(horaTermino,'%H:%i')  as 'Horario Termino'
+select Turma.codTurma,
+       Turma.siglaTurma, 
+       codDisciplina,
+       Disciplina.nomeDisciplina, 
+       Horario.diaSemana, 
+       date_format(horaInicio, '%H:%i'),
+       date_format(horaTermino,'%H:%i')
        
 from Disciplina natural join
      Turma      natural join
-	 Horario 
+	 Horario                                  
                                                    
 where Turma.turmaEncerrada = false
           and Turma.aberto = true 
@@ -266,11 +267,66 @@ PRINCIPAL: BEGIN
 		 nomeDisciplina    as 'Disciplina' 
   from TabelaTemporaria, Disciplina
   where codDisciplina = codDisciplinaTemp;
+  
   DROP TEMPORARY TABLE TabelaTemporaria;
                                 
 END PRINCIPAL $$
 DELIMITER ;
 # ------------------------------------------------------------------------------------------
+
+
+
+
+
+# ------------------- Consulta de turmas abertas disponíveis para matrícula ---------------- 
+USE SisMatricula;
+DROP PROCEDURE IF EXISTS procedure_consulta_turmas_disponíveis;
+DELIMITER $$
+CREATE PROCEDURE procedure_consulta_turmas_disponíveis(IN codAluno INT)
+PRINCIPAL: BEGIN 
+
+  drop temporary table if exists tbtemporaria;
+	 create temporary table tbtemporaria 
+		    select t.codDisciplina, 
+                   t.nomeDisciplina, 
+                   r.preRequisito 
+			from      view_consulta_disciplinas_para_matricula t 
+            left join DisciplinaPreRequisitos r
+                      on t.codDisciplina = r.codDisciplina 
+                      order by t.codDisciplina ASC;
+                      
+                      
+    BLOCO1: BEGIN
+		DECLARE fim    INT DEFAULT 0;
+		DECLARE codDis INT;
+		DECLARE codPre INT;
+		
+		DECLARE _cursor1 CURSOR FOR select t.codDisciplina, r.preRequisito from tbtemporaria; 
+		
+		DECLARE CONTINUE handler  -- senão encontrar mais linha, setar fim como true para sair do loop
+		          FOR NOT found SET fim = 1;  
+	
+    
+		OPEN _cursor1;
+        
+              LP1: LOOP
+                 FETCH _cursor1 INTO codDis, codPre;
+                    IF(fim) THEN
+                      LEAVE LP1;
+                    END IF;  
+              END LOOP LP1;
+				
+	    CLOSE _cursor1;
+  
+     END BLOCO1;
+  
+drop temporary table if exists tbtemporaria;                     
+
+END PRINCIPAL $$
+DELIMITER ;
+# ------------------------------------------------------------------------------------------
+
+
 
 
 
@@ -282,37 +338,20 @@ DELIMITER ;
    **** Disciplinas relacionadas ao curso
 */
 
--- Consulta de Matrículas no semestre corrente 
-select siglaTurma as 'Turma', 
-       semestreTurma as 'Semestre', 
-       anoTurma as 'Ano', 
-       nomeDisciplina as 'Disciplina',
-       date_format(horaInicio, '%H:%i')  as 'Horario Inicio',
-       date_format(horaTermino,'%H:%i')  as 'Horario Termino'
-       
-from Disciplina natural join 
-     Turma      natural join 
-     Matricula  natural join
-     Usuario, 
-     Horario
-     
-where (Turma.codTurma = Horario.codTurma AND
-       identificacao = '160011111' AND 
-       codEstado = 1 and turmaEncerrada = false);
-
 
 
 # ------------------ Consulta de Disciplinas disponíveis para matrícula ------------------
 DROP VIEW IF EXISTS view_consulta_disciplinas_para_matricula;
 CREATE VIEW view_consulta_disciplinas_para_matricula as
-select codTurma       as 'Codigo',
-       siglaTurma     as 'Turma', 
-       semestreTurma  as 'Semestre', 	
-       anoTurma       as 'Ano', 
-       nomeDisciplina as 'Disciplina',
-       diaSemana      as 'Dia',
-       date_format(horaInicio, '%H:%i')  as 'Horario Inicio',
-       date_format(horaTermino,'%H:%i')  as 'Horario Termino'
+select codTurma,
+       siglaTurma, 
+       semestreTurma, 	
+       anoTurma, 
+       codDisciplina,
+       nomeDisciplina,
+       diaSemana,
+       date_format(horaInicio, '%H:%i'),
+       date_format(horaTermino,'%H:%i')
        
 from Disciplina natural join 
      Turma      natural join 
