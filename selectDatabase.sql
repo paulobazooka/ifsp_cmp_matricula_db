@@ -1,4 +1,4 @@
- /*SELECT @@lc_time_names;
+/* SELECT @@lc_time_names;
    SET GLOBAL lc_time_names=pt_BR;
    SET lc_time_names = 'pt_BR';
    SELECT @@lc_time_names;
@@ -24,7 +24,7 @@ DELIMITER ;  -- call procedure_retorna_semestre_atual();
 
 
 
-
+-- call procedure_retorna_nome_dia(3); 
 
 # ----------------- Procedure para retornar o nome do dia da semana ---------------------
 USE SisMatricula;
@@ -45,7 +45,7 @@ BEGIN
     end if;
 
 END $$
-DELIMITER ;  -- call procedure_retorna_nome_dia(3);
+DELIMITER ;  
 # --------------------------------------------------------------------------------
 
 
@@ -275,20 +275,18 @@ DELIMITER ;
 # ------------------------------------------------------------------------------------------
 
 
-
-
-
 # ------------------- Consulta de turmas abertas disponíveis para matrícula ---------------- 
 USE SisMatricula;
-DROP PROCEDURE IF EXISTS procedure_consulta_turmas_disponíveis;
+DROP PROCEDURE IF EXISTS procedure_consulta_turmas_disponiveis;
 DELIMITER $$
-CREATE PROCEDURE procedure_consulta_turmas_disponíveis(IN codAluno INT)
+CREATE PROCEDURE procedure_consulta_turmas_disponiveis(IN codAluno INT)
 PRINCIPAL: BEGIN 
-
-  drop temporary table if exists tbtemporaria;
+     
+     -- Cria tabela que irá associar as turmas abertas com as disciplinas de pre requisitos
+	 drop temporary table if exists tbtemporaria;
 	 create temporary table tbtemporaria 
 		    select t.codDisciplina, 
-                   t.nomeDisciplina, 
+                   t.codTurma, 
                    r.preRequisito 
 			from      view_consulta_disciplinas_para_matricula t 
             left join DisciplinaPreRequisitos r
@@ -296,31 +294,87 @@ PRINCIPAL: BEGIN
                       order by t.codDisciplina ASC;
                       
                       
-    BLOCO1: BEGIN
-		DECLARE fim    INT DEFAULT 0;
+     -- Cria tabela de cada disciplina com seus pre requisitos
+     drop temporary table if exists tabelinharequisitos;
+     create temporary table tabelinharequisitos select t.codDisciplina, 
+											           t.codTurma, 
+											           r.preRequisito        
+										 from      view_consulta_disciplinas_para_matricula t 
+										 inner join DisciplinaPreRequisitos r
+
+										 on t.codDisciplina = r.codDisciplina; 
+										 
+                                           
+     BLOCO1: BEGIN
+		DECLARE fim    INT DEFAULT 0;  
+        DECLARE fim2   INT DEFAULT 0; 
 		DECLARE codDis INT;
 		DECLARE codPre INT;
-		
-		DECLARE _cursor1 CURSOR FOR select t.codDisciplina, r.preRequisito from tbtemporaria; 
+        DECLARE codT   INT;
+		DECLARE flag   INT DEFAULT 0;
+        
+		DECLARE _cursor1 CURSOR FOR select * from tbtemporaria; 
 		
 		DECLARE CONTINUE handler  -- senão encontrar mais linha, setar fim como true para sair do loop
 		          FOR NOT found SET fim = 1;  
-	
-    
-		OPEN _cursor1;
-        
+                  
+	    drop temporary table if exists TurmasParaMatricula;
+        CREATE TEMPORARY TABLE TurmasParaMatricula(codTurma INT);
+		
+        OPEN _cursor1;        
               LP1: LOOP
-                 FETCH _cursor1 INTO codDis, codPre;
-                    IF(fim) THEN
+                 FETCH _cursor1 INTO codDis, codT, codPre;
+                    IF (fim) THEN
                       LEAVE LP1;
-                    END IF;  
+                    ELSE
+                        IF (codPre is null) THEN
+                           INSERT INTO TurmasParaMatricula (codTurma) VALUES (codT);
+                        ELSE
+                           BLOCO2: BEGIN
+                                                     
+                           DECLARE codRequi INT;
+                           DECLARE codTur  INT;
+                           DECLARE codDis2  INT;
+                           
+                           DECLARE _cursor2 CURSOR FOR select * from tabelinharequisitos where codDisciplina = codDis;
+                           DECLARE CONTINUE handler  -- senão encontrar mais linha, setar fim como true para sair do loop
+		                           FOR NOT found SET fim2 = 1; 
+                                
+                                OPEN _cursor2;   
+								LP2: LOOP
+								FETCH _cursor2 INTO codDis2, codTur, codRequi;
+                                    IF(fim2) THEN 
+                                      LEAVE LP2;
+                                    ELSE 
+                                       IF((select codDisciplina from Disciplina natural join Turma natural join DisciplinaConcluida natural join Usuario
+                                                    where codUsuario = codAluno and codDisciplina = codRequi) is not null) THEN
+                                          SET flag = 1;                                          
+                                       ELSE
+                                          SET flag = 0;
+                                       END IF;
+                                    END IF;                                
+								END LOOP LP2; 
+                                   
+                           CLOSE _cursor2;     
+                           END BLOCO2;
+                           SET fim2 = 0;
+                           
+						          IF(flag = 1) THEN
+									 SET flag = 0;
+									 insert into TurmasParaMatricula VALUES (codT); 
+								  END IF;
+                        END IF;   
+                    END IF;
               END LOOP LP1;
-				
 	    CLOSE _cursor1;
   
      END BLOCO1;
-  
-drop temporary table if exists tbtemporaria;                     
+     
+ select codTurma from TurmasParaMatricula;
+
+DROP TEMPORARY TABLE tabelinharequisitos;  
+DROP TEMPORARY TABLE tbtemporaria;
+DROP TEMPORARY TABLE TurmasParaMatricula;                     
 
 END PRINCIPAL $$
 DELIMITER ;
@@ -340,7 +394,7 @@ DELIMITER ;
 
 
 
-# ------------------ Consulta de Disciplinas disponíveis para matrícula ------------------
+# ------------------ Consulta de Disciplinas disponíveis gerais para matrícula ------------------
 DROP VIEW IF EXISTS view_consulta_disciplinas_para_matricula;
 CREATE VIEW view_consulta_disciplinas_para_matricula as
 select codTurma,
@@ -409,7 +463,7 @@ where (Turma.codTurma = Horario.codTurma AND
        Turma.aberto = true               AND
        EstadoMat.codEstado = Matricula.codEstado);
 END $$
-DELIMITER ;       -- call procedure_consulta_situacao_matricula(5);
+DELIMITER ;       
 # -----------------------------------------------------------------------------  
 
 
