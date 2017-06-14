@@ -95,11 +95,35 @@ DELIMITER ;
 
 
 
+# ---------------------- procedure para consultar dados cadastrais ----------------------------------
+USE SisMatricula;
+DROP PROCEDURE IF EXISTS procedure_consulta_dados_cadastrais;
+DELIMITER $$
+CREATE PROCEDURE procedure_consulta_dados_cadastrais(IN codusuario INT) 
+BEGIN
+     select codUsuario,
+		    identificacao,
+		    nomeUsuario, 					 
+		    dataNas,
+            cpf,
+            ingresso,
+            email,
+            telefone1,
+            telefone2,
+            codTipoUsuario
+      from Usuario
+      where codUsuario = codusuario;        
+END $$
+DELIMITER ;
+# --------------------------------------------------------------------------------
+
+
+
 -- Inserir novo Aluno
 USE SisMatricula;
-DROP PROCEDURE IF EXISTS procedure_insert_novo_aluno;
+DROP PROCEDURE IF EXISTS procedure_insert_aluno;
 DELIMITER $$
-CREATE PROCEDURE procedure_insert_novo_aluno(IN id varchar(20),
+CREATE PROCEDURE procedure_insert_aluno(IN id varchar(20),
                                              IN nome varchar(75),
                                              IN sen varchar(50),
                                              IN data_nas date,
