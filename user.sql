@@ -1,27 +1,42 @@
-
 -- Rotina para Deletar se existir os usários que utilizarão o sistema de matrícula
+USE SisMatricula;
+
 DROP USER if exists 'admin'@'localhost';       -- administrador do sistema 
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
+
 DROP USER if exists 'aluno'@'localhost';       -- aluno
-DROP USER if exists 'professor'@'locahost';    -- professor
+CREATE USER 'aluno'@'localhost' IDENTIFIED BY 'aluno';
+-- privilégios para aluno
+GRANT SELECT ON view_consulta_disciplinas_curso TO 'aluno'@'localhost'; 
+GRANT SELECT ON view_consulta_disciplinas_para_matricula TO 'aluno'@'localhost';
+GRANT SELECT ON view_consulta_turmas_abertas TO 'aluno'@'localhost';
+GRANT SELECT ON view_consulta_disciplinas_para_matricula TO 'aluno'@'localhost';
+GRANT SELECT ON view_consulta_cursos TO 'aluno'@'localhost';
+GRANT SELECT ON procedure_solicitar_matricula TO 'aluno'@'localhost';
+GRANT SELECT ON procedure_cancelar_matricula TO 'aluno'@'localhost';
+GRANT SELECT ON procedure_consulta_dados_cadastrais TO 'aluno'@'localhost';
+GRANT SELECT ON procedure_update_aluno TO 'aluno'@'localhost';
+GRANT SELECT ON procedure_login TO 'aluno'@'localhost';
+GRANT SELECT ON procedure_login_retorna_usuario TO 'aluno'@'localhost';
+GRANT SELECT ON procedure_consulta_sitaucao_matricula TO 'aluno'@'localhost';
+
+
+DROP USER if exists 'professor'@'localhost';    -- professor
+CREATE USER 'professor'@'localhost' IDENTIFIED BY 'professor';
+
 DROP USER if exists 'tecnicoadm'@'localhost';  -- tecnico administrativo do instituto (CRE)
+CREATE USER 'tecnicoadm'@'localhost' IDENTIFIED BY 'tecnicoadm';
+
 DROP USER if exists 'coordenador'@'localhost'; -- coordenador do curso
+CREATE USER 'coordenador'@'localhost' IDENTIFIED BY 'coordenador';
 
-CREATE USER 'admin'@'localhost'        -- cria usuario administrador   
-IDENTIFIED BY '@dministr4DOR';
 
-CREATE USER 'coordenador'@'localhost'  -- cria usuario coordenador
-IDENTIFIED BY 'c00rden@dorIFSP';
- 
-CREATE USER 'aluno'@'localhost'        -- cria usuario aluno
-IDENTIFIED BY '@lun0IFSP';
 
-CREATE USER 'professor'@'localhost'    -- cria usuario professor 
-IDENTIFIED BY 'pr0fe$$orIFSP';
 
-CREATE USER 'tecnicoadm'@'localhost'   -- cria usuario tecnico administrativo
-IDENTIFIED BY 'tecn1co@dmIFSP';
+
+
 
 USE SisMatricula;
-GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';  -- garante privilegio total ao banco de dados SisMatricula ao administrador
-/*
-GRANT SELECT, UPDATE ON Usuario.
+
+
+
