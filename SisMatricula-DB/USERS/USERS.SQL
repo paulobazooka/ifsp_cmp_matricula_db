@@ -1,12 +1,18 @@
 -- Rotina para Deletar se existir os usários que utilizarão o sistema de matrícula
 USE SisMatricula;
 
+
+DROP USER IF EXISTS 'login'@'localhost'; -- usuário para login
+CREATE USER 'login'@'localhost' IDENTIFIED BY 'login';
+-- privilégios para o usuario logar no sistema
+GRANT ALL ON procedure_login TO 'login'@'localhost';
+GRANT ALL ON procedure_login_retorna_usuario TO 'login'@'localhost';
+
+
 DROP USER if exists 'admin'@'localhost';       -- administrador do sistema 
 CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
 -- privilégios para o dba
 GRANT ALL ON SisMatricula.* TO 'admin'@'localhost'; 
-
-
 
 
 DROP USER if exists 'coordenador'@'localhost'; -- coordenador do curso
