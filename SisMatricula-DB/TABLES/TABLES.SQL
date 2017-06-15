@@ -1,13 +1,4 @@
--- Database Projeto do Sistema de Matrícula em Disciplinas
--- Cássia Chin   
--- Lucas Dias
--- Paulo
-
-DROP DATABASE IF EXISTS SisMatricula;
-CREATE SCHEMA SisMatricula;
 USE SisMatricula;
-
-
 
 -- Tabela tipo de usuário: coordenador curso, servidor cre, professor, aluno
 CREATE TABLE TipoUsuario(codTipoUsuario int primary key auto_increment,

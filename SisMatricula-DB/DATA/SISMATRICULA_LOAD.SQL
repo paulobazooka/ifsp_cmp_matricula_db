@@ -2,9 +2,9 @@
 USE SisMatricula;
 
 INSERT INTO Curso(nomeCurso, siglaCurso, dtCurso, descricao) VALUES 
-				 ('Análise e Desenvolvimento de Sistemas', 'ADS','2013-06-01', null),
-                 ('Técnico em Análise e Desenvolvimento de Sistemas', 'TADS', '2017-01-01', null),
-                 ('Técnico em Eletroeletrônica', 'TEE', '2016-01-01', null);
+				 ('Análise e Desenvolvimento de Sistemas', 'ADS','2013-06-01', 'superior'),
+                 ('Técnico em Análise e Desenvolvimento de Sistemas', 'TADS', '2017-01-01', 'técnico'),
+                 ('Técnico em Eletroeletrônica', 'TEE', '2016-01-01', 'tecnico');
                  
                  
                  
