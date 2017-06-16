@@ -74,6 +74,10 @@ DROP PROCEDURE IF EXISTS procedure_login_retorna_usuario;    -- procedure para r
 DELIMITER $$
 CREATE PROCEDURE procedure_login_retorna_usuario (IN id varchar(25), IN pass varchar(25))
 BEGIN
+   
+   DECLARE cod INT;
+   SET cod = (select codUsuario from Usuario where identificacao = id and senha = md5(pass));
+   
    select codUsuario,
 	      identificacao,
 	      nomeUsuario,                     
@@ -89,16 +93,28 @@ BEGIN
    
    where identificacao = id and senha = md5(pass);
    
-   insert into TabelaLogincodLog(codUsuario) values (id);
-                         
-                        
-                         
-                         
-   
+   insert into TabelaLogincodLog(codUsuario) values (cod);
    
 END $$
 DELIMITER ; 
 # --------------------------------------------------------------------------------------------------
+
+
+# ------------------------ procedure para logoff ------------------------------------
+USE SisMatricula;
+DROP PROCEDURE IF EXISTS procedure_logoff;    -- procedure para logoff
+DELIMITER $$
+CREATE PROCEDURE procedure_logoff (IN cod INT)
+BEGIN
+   
+   DECLARE codlog2 INT;
+   SET codlog2 = (select codLog from TabelaLogin where codUsuario = cod ORDER BY codLog DESC LIMIT 1);
+   
+   UPDATE TabelaLogin SET horaSaiu = current_timestamp() where (codLog = codlog2 and horaSaiu = NULL);
+   
+END $$
+DELIMITER ; 
+
 
 
 
