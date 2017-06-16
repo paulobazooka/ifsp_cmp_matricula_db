@@ -748,7 +748,7 @@ DELIMITER ;
 
 
 
-
+call procedure_consulta_turmas_disponiveis(5);
 
 # ------------------- Consulta de turmas abertas disponíveis para matrícula ---------------- 
 USE SisMatricula;
@@ -845,7 +845,10 @@ PRINCIPAL: BEGIN
   
      END BLOCO1;
      
- select codTurma from TurmasParaMatricula;
+ select t.codTurma, t.siglaTurma, d.nomeDisciplina, u.nomeUsuario as 'professor', h.diaSemana, 
+		concat(date_format(h.horaInicio, '%H-'),date_format(h.horaTermino,'%H')) as 'horario' from TurmasParaMatricula natural join
+        Turma t natural join Disciplina d, Horario h, Usuario u, ProfessorTurma p
+        where t.codTurma = h.codTurma AND t.codTurma = p.codTurma AND p.codUsuario = u.codUsuario order by t.codTurma;
 
 DROP TEMPORARY TABLE tabelinharequisitos;  
 DROP TEMPORARY TABLE tbtemporaria;
