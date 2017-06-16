@@ -748,7 +748,7 @@ DELIMITER ;
 
 
 
-call procedure_consulta_turmas_disponiveis(5);
+
 
 # ------------------- Consulta de turmas abertas disponíveis para matrícula ---------------- 
 USE SisMatricula;
@@ -845,11 +845,62 @@ PRINCIPAL: BEGIN
   
      END BLOCO1;
      
- select t.codTurma, t.siglaTurma, d.nomeDisciplina, u.nomeUsuario as 'professor', h.diaSemana, 
-		concat(date_format(h.horaInicio, '%H-'),date_format(h.horaTermino,'%H')) as 'horario' from TurmasParaMatricula natural join
-        Turma t natural join Disciplina d, Horario h, Usuario u, ProfessorTurma p
-        where t.codTurma = h.codTurma AND t.codTurma = p.codTurma AND p.codUsuario = u.codUsuario order by t.codTurma;
+create temporary table T1 
+select tm.codTurma, 
+	   t.siglaTurma, 
+       d.nomeDisciplina, 
+       u.nomeUsuario as 'professor1',
+       u.nomeUsuario as 'professor2',
+       h.diaSemana, 
+	   concat(date_format(h.horaInicio, '%H-'),date_format(h.horaTermino,'%H')) as 'horario' 
+from TurmasParaMatricula tm natural join
+	 Turma t natural join 
+     Disciplina d, 
+     Horario h, 
+     Usuario u,
+     
+     ProfessorTurma p
+where t.codTurma = h.codTurma AND 
+      t.codTurma = p.codTurma AND 
+      p.codUsuario = u.codUsuario 
+order by t.codTurma;
+       
 
+   
+       BLOCO2: BEGIN
+       DECLARE prof1 VARCHAR(100);
+       DECLARE prof2 VARCHAR(100);
+       DECLARE cod   INT;
+       DECLARE _fim int default 0;
+       
+	   DECLARE _cur CURSOR FOR select codTurma from T1; 
+		
+	   DECLARE CONTINUE handler  -- senão encontrar mais linha, setar fim como true para sair do loop
+		          FOR NOT found SET _fim = 1;        
+       
+                           OPEN _cur;   
+								
+                                LP3: LOOP
+								FETCH _cur INTO cod;
+                                    
+                                    IF(_fim) THEN 
+                                      LEAVE LP3;
+                                    ELSE 
+                                      CREATE TEMPORARY TABLE T2 SELECT codTurma, professor1 FROM T1 where codTurma = cod;
+                                      SET prof1 = (select professor1 from T2 order by codTurma DESC LIMIT 1);                                    
+									  UPDATE T1 SET professor2 = prof1 where codTurma = cod;  
+									  DROP TEMPORARY TABLE T2;
+                                    END IF;                                                                   
+								END LOOP LP3; 
+                                   
+                           CLOSE _cur;     
+       END BLOCO2;
+       
+       
+       
+ select * from T1 where professor1 != professor2;
+       
+DROP TEMPORARY TABLE T1;
 DROP TEMPORARY TABLE tabelinharequisitos;  
 DROP TEMPORARY TABLE tbtemporaria;
 DROP TEMPORARY TABLE TurmasParaMatricula;                     
