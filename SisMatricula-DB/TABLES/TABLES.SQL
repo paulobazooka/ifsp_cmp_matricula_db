@@ -181,6 +181,11 @@ BEGIN
          INSERT INTO AssinaturaDigitalMatricula (codMatricula, assinatura, dtDeferimento) VALUES  -- inserir na tabela
 			    (NEW.codMatricula, md5(NEW.codMatricula + NEW.codTurma + NEW.codUsuario +        -- comprovação da matricula
                  NEW.dtMatricula + now()), NEW.dtMatricula);                                    -- através dos campos indicados
+     
+     UPDATE Turma
+     SET Turma.matriculasRealizadas = Turma.matriculasRealizadas + 1 
+     WHERE Turma.codTurma = New.codTurma;
+
      end if;
 
 END ||
