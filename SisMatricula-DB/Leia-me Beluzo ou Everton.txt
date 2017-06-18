@@ -1,8 +1,0 @@
-Por gentileza:
-
-O arquivo 00_CRIACAO_DB_SISMATRICULA.SQL instala e insere todos os dados referente ao banco de dados SisMatricula
-
-Os arquivos 01_CREATE_DB_SISMATRICULA.SQL, 02_INSTALL_SISMATRICULA.SQL e
-03_DATA_LOAD_SISMATRICULA.SQL seguem o exemplo dado em aula/disponível no moodle.
-
-As views de inteligência estão na pasta VIEWS separadas por arquivos identificados.
