@@ -26,7 +26,7 @@ BEGIN
    
    where identificacao = id and senha = md5(pass);
    
-   insert into TabelaLogincodLog(codUsuario) values (cod);
+   insert into TabelaLogin(codUsuario) values (cod);
    
 END $$
 DELIMITER ; 
