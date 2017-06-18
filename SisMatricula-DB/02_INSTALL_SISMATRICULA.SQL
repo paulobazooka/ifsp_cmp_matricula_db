@@ -28,6 +28,7 @@ SOURCE VIEWS/inteligencia_view_matriculas_canceladas.sql
 SOURCE VIEWS/inteligencia_view_quantidade_reprovacoes_disciplina.sql
 SOURCE VIEWS/inteligencia_view_quantidade_solicitacoes_matriculas.sql
 SOURCE VIEWS/inteligencia_view_quantidade_turmas_prof.sql
+SOURCE VIEWS/inteligencia_view_ultimas_alteracoes_DB.sql
 SELECT TABLE_NAME AS 'VIEWS CREATED:' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'view_%';
 SELECT 'DONE!' AS ' ';
 

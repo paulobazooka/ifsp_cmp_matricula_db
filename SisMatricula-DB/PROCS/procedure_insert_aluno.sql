@@ -14,10 +14,10 @@ CREATE PROCEDURE procedure_insert_aluno(IN id varchar(20),
                                         IN tel2 varchar(15),
                                         IN curso int)           -- 1 p/ ADS,   2 e 3 p/ cursos tecnicos.
 
-DECLARE cod INT;
+
 
 BEGIN
-  
+  DECLARE cod INT;
   START TRANSACTION;
   INSERT INTO Usuario(identificacao, nomeUsuario, senha, dataNas, cpf, 
                                     email, telefone1, telefone2, codTipoUsuario) VALUES
