@@ -1,0 +1,84 @@
+INFO
+CREATING SisMatricula DATABASE...
+
+DONE!
+
+CREATING TABLES...
+TABLE CREATED:
+Usuario
+TABLE CREATED:
+Curso
+TABLE CREATED:
+Disciplina
+TABLE CREATED:
+Turma
+TABLE CREATED:
+Matricula
+TABLE CREATED:
+TabelaAlteracoes
+TABLE CREATED:
+Turno
+TABLE CREATED:
+Horario
+TABLE CREATED:
+TipoUsuario
+TABLE CREATED:
+CursoDisciplina
+
+DONE!
+
+CREATEING VIEWS...
+VIEWS CREATED:
+VIEWS
+view_consulta_cursos
+view_consulta_dados_cadastrais
+view_consulta_disciplinas_curso
+view_consulta_disciplinas_para_matricula
+view_consulta_turmas_abertas
+view_solicitacoes_matriculas_coordenador
+
+DONE!
+
+CREATEING PROCEDURES...
+
+DONE!
+
+CREATEING TRIGGERS...
+
+DONE!
+
+CREATING USERS AND PERMISSIONS...
+
+DONE!
+
+LOADING DATA...
+RECORDS INSERTED ON TABLE Curso:
+3
+RECORDS INSERTED ON TABLE Disciplina:
+36
+RECORDS INSERTED ON TABLE Turno:
+3
+RECORDS INSERTED ON TABLE Disciplina:
+5
+RECORDS INSERTED ON TABLE DisciplinaPreRequisitos:
+28
+RECORDS INSERTED ON TABLE CursoDisciplina:
+36
+RECORDS INSERTED ON TABLE TipoUsuario:
+6
+RECORDS INSERTED ON TABLE Usuario:
+48
+RECORDS INSERTED ON TABLE AlunoCurso:
+31
+RECORDS INSERTED ON TABLE Turma:
+29
+RECORDS INSERTED ON TABLE Disciplina:
+29
+RECORDS INSERTED ON TABLE ProfessorTurma:
+56
+RECORDS INSERTED ON TABLE Matricula:
+402
+RECORDS INSERTED ON TABLE DisciplinaConcluida:
+392
+
+DONE!

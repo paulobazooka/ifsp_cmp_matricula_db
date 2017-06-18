@@ -84,3 +84,7 @@ SOURCE TRIGGERS/trigger_atualiza_disciplina_concluida_update.sql
 SOURCE TRIGGERS/trigger_atualiza_turma.sql
 SELECT 'DONE!' AS ' ';
 
+
+SELECT 'CREATING USERS AND PERMISSIONS...' AS ' ';
+SOURCE USERS/DB_SISMATRICULA__permissions.SQL
+SELECT 'DONE!' AS ' ';
