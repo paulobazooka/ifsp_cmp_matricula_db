@@ -26,7 +26,7 @@ BEGIN
   
   SET cod = (select codUsuario from Usuario where identificacao = id);
 
-  INSERT INTO AlunoCurso(codCurso, codAluno, concluido) VALUES
+  INSERT INTO AlunoCurso(codCurso, codUsuario, concluido) VALUES
                         (   curso,      cod,         0);
                                                        
   
